@@ -44,7 +44,12 @@ public class OfferService {
         return offerRepository.findById(id)
                 .map(offerData -> {
                     offerData.setNameOf(offer.getNameOf());
+                    offerData.setDescriptionOf(offer.getDescriptionOf());
+                    offerData.setDiscountType(offer.getDiscountType());
                     offerData.setValueOf(offer.getValueOf());
+                    offerData.setAvailable(offer.getAvailable());
+                    offerData.setStartDate(offer.getStartDate());
+                    offerData.setEndDate(offer.getEndDate());
                     return offerRepository.save(offerData);
                 })
                 .orElseThrow(() -> new OfferNotFoundException(id));
