@@ -4,6 +4,8 @@ package com.mx.loloscafe.backend_server.model;
 import com.mx.loloscafe.backend_server.model.enums.ProductType;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "products")
 public class Products {
@@ -21,6 +23,17 @@ public class Products {
     @Column(name = "type", nullable = false)
     private ProductType type;
 
+    @Column(name = "have_coffe", nullable = false)
+    private Boolean haveCoffe = true;
+
+    @Column(name = "url_image")
+    private String urlImage;
+
+    @Column (nullable = false)
+    private Boolean available = true;
+
+    @Column(name = "date_creation", nullable = false, updatable = false)
+    private LocalDateTime dateCreation;
 
 //    name_of VARCHAR(100) NOT NULL,
 //    description VARCHAR(255),
@@ -29,6 +42,5 @@ public class Products {
 //    url_image VARCHAR(255),
 //    available TINYINT(1) NOT NULL DEFAULT 1,
 //    date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
 
 }
