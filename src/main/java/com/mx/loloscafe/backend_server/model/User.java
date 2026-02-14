@@ -1,7 +1,10 @@
 package com.mx.loloscafe.backend_server.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +27,10 @@ public class User {
     @Column (nullable = false)
     private Boolean available = true;
 
+    //Order (1:N)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
+
     public User(Integer id, String nameOf, String email, String password, Boolean available) {
         this.id = id;
         this.nameOf = nameOf;
@@ -35,6 +42,7 @@ public class User {
     // Java crea por default un constructor vacio, JPA busca un constructor vacio (El que creamos)
     public User() {
     }
+
 
     //Se crean los Getters y Setters
 
@@ -87,6 +95,15 @@ public class User {
                 ", password='" + password + '\'' +
                 ", available=" + available +
                 '}';
+    }
+
+    //Order Getter and Setter
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override
