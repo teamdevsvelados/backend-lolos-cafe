@@ -14,9 +14,13 @@ public class Size {
     @Column (name = "name_of", nullable = false, length = 20)
     private String nameOf;
 
-    public Size(Integer id, String nameOf) {
+    @Column (nullable = false)
+    private Boolean available = true;
+
+    public Size(Integer id, String nameOf, Boolean available) {
         this.id = id;
         this.nameOf = nameOf;
+        this.available = available;
     }
 
     public Size() {
@@ -38,22 +42,31 @@ public class Size {
         this.nameOf = nameOf;
     }
 
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
     @Override
     public String toString() {
         return "Sizes{" +
                 "id=" + id +
                 ", nameOf='" + nameOf + '\'' +
+                ", available=" + available +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Size sizes)) return false;
-        return Objects.equals(id, sizes.id) && Objects.equals(nameOf, sizes.nameOf);
+        if (!(o instanceof Size size)) return false;
+        return Objects.equals(id, size.id) && Objects.equals(nameOf, size.nameOf) && Objects.equals(available, size.available);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameOf);
+        return Objects.hash(id, nameOf, available);
     }
 }
