@@ -18,12 +18,6 @@ public class Role {
     @Column(name = "name_of", nullable = false, length = 30, unique = true)
     private String nameOf;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "rol_permission",
-            joinColumns = @JoinColumn(name = "rol_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
     private Set<Permission> permissions = new HashSet<>();
 
     public Role() {}
