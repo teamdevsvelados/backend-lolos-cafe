@@ -2,6 +2,7 @@ package com.mx.loloscafe.backend_server.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 // JPA entity mapped to the offers table.
@@ -17,10 +18,10 @@ public class Offer {
     @Column(name = "name_of", nullable = false, length = 100)
     private String nameOf;
 
-    @Column(name = "value_of", nullable = false)
-    private Double valueOf;
+    @Column(name = "value_of", nullable = false, precision = 10, scale = 2)
+    private BigDecimal valueOf;
 
-    public Offer(Integer id, String nameOf, Double valueOf) {
+    public Offer(Integer id, String nameOf, BigDecimal valueOf) {
         this.id = id;
         this.nameOf = nameOf;
         this.valueOf = valueOf;
@@ -45,11 +46,11 @@ public class Offer {
         this.nameOf = nameOf;
     }
 
-    public Double getValueOf() {
+    public BigDecimal getValueOf() {
         return valueOf;
     }
 
-    public void setValueOf(Double valueOf) {
+    public void setValueOf(BigDecimal valueOf) {
         this.valueOf = valueOf;
     }
 
