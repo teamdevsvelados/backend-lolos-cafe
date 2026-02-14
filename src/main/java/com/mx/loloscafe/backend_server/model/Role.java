@@ -1,7 +1,6 @@
 package com.mx.loloscafe.backend_server.model;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,11 +11,11 @@ import java.util.Set;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // TINYINT UNSIGNED AUTO_INCREMENT
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name_of", nullable = false, length = 30, unique = true)
-    private String nameOf;
+    private String nameOf; // "ADMIN", "CLIENT", etc.
 
     private Set<Permission> permissions = new HashSet<>();
 
