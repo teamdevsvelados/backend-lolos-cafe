@@ -35,6 +35,16 @@ public class Products {
     @Column(name = "date_creation", nullable = false, updatable = false)
     private LocalDateTime dateCreation;
 
+        @ManyToMany(mappedBy = "products")
+        private java.util.Set<Offer> offers = new java.util.HashSet<>();
+
+        public java.util.Set<Offer> getOffers() {
+            return offers;
+        }
+        public void setOffers(java.util.Set<Offer> offers) {
+            this.offers = offers;
+        }
+
 //    name_of VARCHAR(100) NOT NULL,
 //    description VARCHAR(255),
 //    type ENUM('BEBIDA','POSTRE','EXTRA','PROMO') NOT NULL,

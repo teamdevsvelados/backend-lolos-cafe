@@ -12,6 +12,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/offers")
 public class OfferController {
+import com.mx.loloscafe.backend_server.exceptions.ErrorResponse;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+    @ExceptionHandler(OfferNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleOfferNotFound(OfferNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(new ErrorResponse(ex.getMessage(), 404));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
+    String msg = ex.getBindingResult().getFieldErrors().stream()
+        .map(err -> err.getField() + ": " + err.getDefaultMessage())
+        .findFirst().orElse("Datos inválidos");
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorResponse(msg, 400));
+    }
+import org.springframework.security.access.prepost.PreAuthorize;
 
     private final OfferService offerService;
 
@@ -26,39 +43,30 @@ public class OfferController {
     }
 
     // Create a new offer.
-    @PostMapping("/new-offer")
-    public ResponseEntity<Offer> saveOffer(@RequestBody Offer newOffer) {
+    @PostMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Offer> saveOffer(@RequestBody @Valid Offer newOffer) {
         return ResponseEntity.status(HttpStatus.CREATED).body(offerService.createOffer(newOffer));
     }
 
     // Fetch a single offer by id.
     @GetMapping("/{id}")
     public ResponseEntity<Offer> findOfferById(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(offerService.findById(id));
-        } catch (OfferNotFoundException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity.ok(offerService.findById(id));
     }
 
     // Delete an offer by id.
-    @DeleteMapping("/delete-offer/{id}")
-    public ResponseEntity<Offer> deleteOfferById(@PathVariable Integer id) {
-        try {
-            offerService.deleteOfferById(id);
-            return ResponseEntity.noContent().build();
-        } catch (OfferNotFoundException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Void> deleteOfferById(@PathVariable Integer id) {
+        offerService.deleteOfferById(id);
+        return ResponseEntity.noContent().build();
     }
 
     // Update an existing offer.
-    @PutMapping("/update-offer/{id}")
-    public ResponseEntity<Offer> updateOffer(@RequestBody Offer offer, @PathVariable Integer id) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(offerService.updateOfferById(offer, id));
-        } catch (OfferNotFoundException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Offer> updateOffer(@RequestBody @Valid Offer offer, @PathVariable Integer id) {
+        return ResponseEntity.ok(offerService.updateOfferById(offer, id));
     }
 }

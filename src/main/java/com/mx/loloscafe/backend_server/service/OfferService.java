@@ -20,6 +20,18 @@ public class OfferService {
         return offerRepository.findAll();
     }
 
+        // List only active offers (available=true, current date between startDate/endDate or null)
+        public List<Offer> getActiveOffers() {
+            return offerRepository.findAll().stream()
+                    .filter(offer -> Boolean.TRUE.equals(offer.getAvailable()))
+                    .filter(offer -> {
+                        var now = java.time.LocalDate.now();
+                        return (offer.getStartDate() == null || !now.isBefore(offer.getStartDate())) &&
+                               (offer.getEndDate() == null || !now.isAfter(offer.getEndDate()));
+                    })
+                    .toList();
+        }
+
     // Create a new offer.
     public Offer createOffer(Offer newOffer) {
         return offerRepository.save(newOffer);

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import jakarta.validation.constraints.*;
 
 // JPA entity mapped to the offers table.
 @Entity
@@ -17,19 +18,26 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
+    @Size(min = 2, max = 100)
     @Column(name = "name_of", nullable = false, length = 100)
     private String nameOf;
 
+    @Size(max = 255)
     @Column(name = "description_of", length = 255)
     private String descriptionOf;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "discount_type", nullable = false)
     private DiscountType discountType;
 
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = true)
     @Column(name = "value_of", nullable = false, precision = 10, scale = 2)
     private BigDecimal valueOf;
 
+    @NotNull
     @Column(nullable = false)
     private Boolean available = true;
 
@@ -38,6 +46,21 @@ public class Offer {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+        @ManyToMany
+        @JoinTable(
+            name = "offer_product",
+            joinColumns = @JoinColumn(name = "id_offer"),
+            inverseJoinColumns = @JoinColumn(name = "id_product")
+        )
+        private java.util.Set<Products> products = new java.util.HashSet<>();
+
+        public java.util.Set<Products> getProducts() {
+            return products;
+        }
+        public void setProducts(java.util.Set<Products> products) {
+            this.products = products;
+        }
 
     public Offer(Integer id, String nameOf, String descriptionOf, DiscountType discountType, BigDecimal valueOf, Boolean available, LocalDate startDate, LocalDate endDate) {
         this.id = id;
