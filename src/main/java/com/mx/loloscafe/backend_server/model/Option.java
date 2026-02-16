@@ -1,40 +1,50 @@
 package com.mx.loloscafe.backend_server.model;
 
+import com.mx.loloscafe.backend_server.model.enums.OptionType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /** Entity to explain extra option of our products
 * Example: Tipo de leche, shots extra, etc.
 */
 @Entity
-@Table(name = "options")
+@Table(name = "optionsof")
 public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     // Mapping enum "OptionType"
     @Enumerated(EnumType.STRING)
-    @Column(name = "type_of")
+    @Column(name = "typeOf", nullable = false)
     private OptionType type;
 
-    @Column(name = "name_of", length = 50)
+    @Column(name = "nameOf", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "extra_price")
+    @Column(name = "extra_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal extraPrice;
 
-    // JPA Constructor
-    public Option() {
+    @Column(nullable = false)
+    private Boolean available = true;
 
+    // JPA Constructor
+    public Option(Integer id, OptionType type, String name, BigDecimal extraPrice, Boolean available) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.extraPrice = extraPrice;
+        this.available = available;
     }
 
-    public Long getId() {
+    // Setters and Getters
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -60,5 +70,35 @@ public class Option {
 
     public void setExtraPrice(BigDecimal extraPrice) {
         this.extraPrice = extraPrice;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
+    @Override
+    public String toString() {
+        return "Option{" +
+                "id=" + id +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", extraPrice=" + extraPrice +
+                ", available=" + available +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Option option)) return false;
+        return Objects.equals(id, option.id) && type == option.type && Objects.equals(name, option.name) && Objects.equals(extraPrice, option.extraPrice) && Objects.equals(available, option.available);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, type, name, extraPrice, available);
     }
 }

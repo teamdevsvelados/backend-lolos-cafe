@@ -1,5 +1,0 @@
-package com.mx.loloscafe.backend_server.model;
-
-public enum OptionType {
-    // Add the types of products
-}
