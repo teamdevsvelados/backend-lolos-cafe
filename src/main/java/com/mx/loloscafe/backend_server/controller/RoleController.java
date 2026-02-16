@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")//ajustar al puerto
 public class RoleController {
 
     private final RoleService roleService;

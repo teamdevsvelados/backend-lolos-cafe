@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/permissions")
-@CrossOrigin(origins = "*") // habilita peticiones desde tu HTML local; luego lo ajustas a tu puerto
+@CrossOrigin(origins = "*") // ajustar al puerto
 public class PermissionController {
 
     private final PermissionService permissionService;
