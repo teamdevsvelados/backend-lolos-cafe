@@ -6,19 +6,31 @@ import java.util.Objects;
 @Table(name="categories")
 public class Category {
 
-    @Id // Definir la Primary Key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Esto hace que un valor sea autoincrementable
+    @Id // Primary key for the category
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremented ID
     private Integer id;
 
+    // Display name for the category
     @Column (name = "name_of", nullable = false, length = 50)
     private String nameOf;
+
+    // Availability flag stored in the table if we want to add soft delete functionality in the future
+    @Column(name = "available", nullable = false)
+    private Boolean available;
+
+    public Category() {
+    }
 
     public Category(Integer id, String nameOf) {
         this.id = id;
         this.nameOf = nameOf;
     }
 
-    public Category (){}
+    public Category(Integer id, String nameOf, Boolean available) {
+        this.id = id;
+        this.nameOf = nameOf;
+        this.available = available;
+    }
 
     public Integer getId() {
         return id;
@@ -36,22 +48,33 @@ public class Category {
         this.nameOf = nameOf;
     }
 
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
     @Override
     public String toString() {
         return "Categories{" +
                 "id=" + id +
                 ", nameOf='" + nameOf + '\'' +
+            ", available=" + available +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Category that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(nameOf, that.nameOf);
+        return Objects.equals(id, that.id)
+                && Objects.equals(nameOf, that.nameOf)
+                && Objects.equals(available, that.available);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameOf);
+        return Objects.hash(id, nameOf, available);
     }
 }
