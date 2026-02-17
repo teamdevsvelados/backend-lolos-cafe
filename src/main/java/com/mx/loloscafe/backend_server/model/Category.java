@@ -4,7 +4,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="categories")
-public class Categories {
+public class Category {
 
     @Id // Primary key for the category
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremented ID
@@ -18,15 +18,15 @@ public class Categories {
     @Column(name = "available", nullable = false)
     private Boolean available;
 
-    public Categories() {
+    public Category() {
     }
 
-    public Categories(Integer id, String nameOf) {
+    public Category(Integer id, String nameOf) {
         this.id = id;
         this.nameOf = nameOf;
     }
 
-    public Categories(Integer id, String nameOf, Boolean available) {
+    public Category(Integer id, String nameOf, Boolean available) {
         this.id = id;
         this.nameOf = nameOf;
         this.available = available;
@@ -67,7 +67,7 @@ public class Categories {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Categories that)) return false;
+        if (!(o instanceof Category that)) return false;
         return Objects.equals(id, that.id)
                 && Objects.equals(nameOf, that.nameOf)
                 && Objects.equals(available, that.available);
