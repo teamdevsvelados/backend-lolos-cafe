@@ -1,6 +1,5 @@
 package com.mx.loloscafe.backend_server.model;
 
-
 import com.mx.loloscafe.backend_server.model.enums.ProductType;
 import jakarta.persistence.*;
 
@@ -81,7 +80,7 @@ public class Product {
         this.type = type;
     }
 
-    public Boolean getHaveCoffe() {
+    public boolean isHaveCoffe() {
         return haveCoffe;
     }
 
@@ -93,7 +92,7 @@ public class Product {
         return available;
     }
 
-    public void setAvailable(Boolean available) {
+    public void setAvailable(boolean available) {
         this.available = available;
     }
 
