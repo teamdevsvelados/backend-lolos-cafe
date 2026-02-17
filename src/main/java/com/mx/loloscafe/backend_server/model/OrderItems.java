@@ -3,7 +3,9 @@ package com.mx.loloscafe.backend_server.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "order_items")
@@ -18,17 +20,25 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "id_product", nullable = false)
-    private Products products;
+    private Products product;
 
     @ManyToOne
     @JoinColumn(name = "id_size")
     private Size size;
 
+    @ManyToMany
+    @JoinTable(
+            name = "order_item_options",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "option_id")
+    )
+    private Set<Option> options = new HashSet<>();
+
     @Column (nullable = false)
     @Min(1)
     private Integer quantity = 1;
 
-    @Column(name = "item_notes", length = 255)
+    @Column(name = "item_notes")
     private String itemNotes;
 
     @Column(name = "base_price", nullable = false, precision = 10, scale = 2)
@@ -38,14 +48,17 @@ public class OrderItems {
     private BigDecimal totalExtras = BigDecimal.ZERO;
 
     @Column(name = "total_line", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalLine;
+    private BigDecimal totalLine = BigDecimal.ZERO;
 
     // Constructor method
-    public OrderItems(Integer id, Order order, Products products, Size size, Integer quantity, String itemNotes, BigDecimal basePrice, BigDecimal totalExtras, BigDecimal totalLine) {
+
+
+    public OrderItems(Integer id, Order order, Products product, Size size, Set<Option> options, Integer quantity, String itemNotes, BigDecimal basePrice, BigDecimal totalExtras, BigDecimal totalLine) {
         this.id = id;
         this.order = order;
-        this.products = products;
+        this.product = product;
         this.size = size;
+        this.options = options;
         this.quantity = quantity;
         this.itemNotes = itemNotes;
         this.basePrice = basePrice;
@@ -57,7 +70,6 @@ public class OrderItems {
     public OrderItems(){}
 
     // Setters and getters
-
 
     public Integer getId() {
         return id;
@@ -75,12 +87,12 @@ public class OrderItems {
         this.order = order;
     }
 
-    public Products getProducts() {
-        return products;
+    public Products getProduct() {
+        return product;
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setProduct(Products product) {
+        this.product = product;
     }
 
     public Size getSize() {
@@ -131,6 +143,14 @@ public class OrderItems {
         this.totalLine = totalLine;
     }
 
+    public Set<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Set<Option> options) {
+        this.options = options;
+    }
+
     @Override
     public String toString() {
         return "OrderItems{" +
@@ -148,13 +168,14 @@ public class OrderItems {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof OrderItems that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(order, that.order) && Objects.equals(products, that.products) && Objects.equals(size, that.size) && Objects.equals(quantity, that.quantity) && Objects.equals(itemNotes, that.itemNotes) && Objects.equals(basePrice, that.basePrice) && Objects.equals(totalExtras, that.totalExtras) && Objects.equals(totalLine, that.totalLine);
+        if (this == o) return true;
+        if (!(o instanceof OrderItems other)) return false;
+        return id != null && id.equals(other.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, order, products, size, quantity, itemNotes, basePrice, totalExtras, totalLine);
+        return getClass().hashCode();
     }
 }
 
