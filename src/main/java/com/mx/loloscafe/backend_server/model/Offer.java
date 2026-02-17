@@ -47,22 +47,20 @@ public class Offer {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-        @ManyToMany
-        @JoinTable(
-            name = "offer_product",
-            joinColumns = @JoinColumn(name = "id_offer"),
-            inverseJoinColumns = @JoinColumn(name = "id_product")
-        )
-        private java.util.Set<Products> products = new java.util.HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "offer_product", joinColumns = @JoinColumn(name = "id_offer"), inverseJoinColumns = @JoinColumn(name = "id_product"))
+    private java.util.Set<Product> products = new java.util.HashSet<>();
 
-        public java.util.Set<Products> getProducts() {
-            return products;
-        }
-        public void setProducts(java.util.Set<Products> products) {
-            this.products = products;
-        }
+    public java.util.Set<Product> getProducts() {
+        return products;
+    }
 
-    public Offer(Integer id, String nameOf, String descriptionOf, DiscountType discountType, BigDecimal valueOf, Boolean available, LocalDate startDate, LocalDate endDate) {
+    public void setProducts(java.util.Set<Product> products) {
+        this.products = products;
+    }
+
+    public Offer(Integer id, String nameOf, String descriptionOf, DiscountType discountType, BigDecimal valueOf,
+            Boolean available, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.nameOf = nameOf;
         this.descriptionOf = descriptionOf;
@@ -156,7 +154,8 @@ public class Offer {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Offer offer)) return false;
+        if (!(o instanceof Offer offer))
+            return false;
         return Objects.equals(id, offer.id)
                 && Objects.equals(nameOf, offer.nameOf)
                 && Objects.equals(descriptionOf, offer.descriptionOf)
