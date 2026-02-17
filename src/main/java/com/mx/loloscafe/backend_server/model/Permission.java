@@ -31,12 +31,14 @@ public class Permission {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Permission p)) return false;
-        return Objects.equals(id, p.id);
+        if (!(o instanceof Permission other)) return false;
+        // comparamos con nameOf 
+        return nameOf != null && nameOf.equals(other.nameOf);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return nameOf != null ? nameOf.hashCode() : 0;
     }
+
 }
