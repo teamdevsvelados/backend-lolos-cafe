@@ -30,6 +30,10 @@ public class Option {
     @Column(nullable = false)
     private Boolean available = true;
 
+    // Empty Constructure
+    public Option() {
+    }
+
     // JPA Constructor
     public Option(Integer id, OptionType type, String name, BigDecimal extraPrice, Boolean available) {
         this.id = id;
