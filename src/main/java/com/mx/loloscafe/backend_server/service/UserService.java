@@ -56,7 +56,7 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
     }
-
+    
     // Método para actualizar un usuario
 
     public User updateUserById(User user, Integer id){
