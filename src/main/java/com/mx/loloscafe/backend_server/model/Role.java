@@ -16,7 +16,12 @@ public class Role {
 
     @Column(name = "name_of", nullable = false, length = 30, unique = true)
     private String nameOf; // "ADMIN", "CLIENT", etc.
-
+    @ManyToMany
+    @JoinTable(
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
     private Set<Permission> permissions = new HashSet<>();
 
     public Role() {}
