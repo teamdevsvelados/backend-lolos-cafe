@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/api/v1/roles")
 @CrossOrigin(origins = "*")//ajustar al puerto
 public class RoleController {
 
