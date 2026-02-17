@@ -2,8 +2,10 @@ package com.mx.loloscafe.backend_server.model;
 
 import com.mx.loloscafe.backend_server.model.enums.OrderStatus;
 import jakarta.persistence.*;
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,14 +24,15 @@ public class Order {
 
     @Column(name = "general_notes")
     private String generalNotes;
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
-    private Long subtotal;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
-    private Long discount;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal = new BigDecimal("0.00");
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
-    private Long total;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal discount = new BigDecimal("0.00");
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal total = new BigDecimal("0.00");
 
     @Column(name = "date_creation", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime dateCreation;
@@ -39,9 +42,19 @@ public class Order {
     @JoinColumn(name = "id_user")
     private User user;
 
+    //--OrderItem (1:N)
+    //@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<OrderItems> orderItems = new ArrayList<>();
 
-    public Order(Integer idOrder, LocalDateTime dateCreation, Long total, Long discount, Long subtotal, String generalNotes, OrderStatus statusOf) {
+    //--Offer (N:1)
+    //@ManyToOne
+    //@JoinColumn(name = "id_offer")
+    //private Offer offer;
+
+
+    public Order(Integer idOrder, User user, LocalDateTime dateCreation, BigDecimal total, BigDecimal discount, BigDecimal subtotal, String generalNotes, OrderStatus statusOf) {
         this.idOrder = idOrder;
+        this.user = user;
         this.dateCreation = dateCreation;
         this.total = total;
         this.discount = discount;
@@ -60,6 +73,33 @@ public class Order {
     public void setIdOrder(Integer idOrder) {
         this.idOrder = idOrder;
     }
+    /*
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
+
+
+    public List<OrderItems> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItems> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+     */
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public LocalDateTime getDateCreation() {
         return dateCreation;
@@ -69,27 +109,27 @@ public class Order {
         this.dateCreation = dateCreation;
     }
 
-    public Long getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public Long getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Long discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
-    public Long getSubtotal() {
+    public BigDecimal getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(Long subtotal) {
+    public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -119,29 +159,21 @@ public class Order {
                 ", discount=" + discount +
                 ", total=" + total +
                 ", dateCreation=" + dateCreation +
+                ", user=" + user +
+                //", orderItems=" + orderItems +
+                //", offer=" + offer +
                 '}';
-    }
-
-    //User Getter and Setter
-
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(idOrder, order.idOrder) && statusOf == order.statusOf && Objects.equals(generalNotes, order.generalNotes) && Objects.equals(subtotal, order.subtotal) && Objects.equals(discount, order.discount) && Objects.equals(total, order.total) && Objects.equals(dateCreation, order.dateCreation);
+        return Objects.equals(idOrder, order.idOrder) && statusOf == order.statusOf && Objects.equals(generalNotes, order.generalNotes) && Objects.equals(subtotal, order.subtotal) && Objects.equals(discount, order.discount) && Objects.equals(total, order.total) && Objects.equals(dateCreation, order.dateCreation) && Objects.equals(user, order.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idOrder, statusOf, generalNotes, subtotal, discount, total, dateCreation);
+        return Objects.hash(idOrder, statusOf, generalNotes, subtotal, discount, total, dateCreation, user);
     }
 }
