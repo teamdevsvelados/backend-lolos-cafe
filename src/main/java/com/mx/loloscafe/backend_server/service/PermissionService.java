@@ -24,6 +24,10 @@ public class PermissionService {
 
     // Crear
     public Permission createPermission(Permission newPermission) {
+        String name = newPermission.getNameOf();
+        if (permissionRepository.existsByNameOf(name)) {
+            throw new IllegalStateException("Permission already exists with nameOf: " + name);
+        }
         return permissionRepository.save(newPermission);
     }
 
