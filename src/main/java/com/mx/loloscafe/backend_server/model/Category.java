@@ -4,7 +4,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="categories")
-public class Categories {
+public class Category {
 
     @Id // Definir la Primary Key
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Esto hace que un valor sea autoincrementable
@@ -13,10 +13,12 @@ public class Categories {
     @Column (name = "name_of", nullable = false, length = 50)
     private String nameOf;
 
-    public Categories(Integer id, String nameOf) {
+    public Category(Integer id, String nameOf) {
         this.id = id;
         this.nameOf = nameOf;
     }
+
+    public Category (){}
 
     public Integer getId() {
         return id;
@@ -44,7 +46,7 @@ public class Categories {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Categories that)) return false;
+        if (!(o instanceof Category that)) return false;
         return Objects.equals(id, that.id) && Objects.equals(nameOf, that.nameOf);
     }
 
