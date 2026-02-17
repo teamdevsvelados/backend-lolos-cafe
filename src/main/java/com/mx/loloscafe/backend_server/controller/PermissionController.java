@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/permissions")
+@RequestMapping("/api/v1/permissions")
 @CrossOrigin(origins = "*") // ajustar al puerto
 public class PermissionController {
 
@@ -35,8 +35,8 @@ public class PermissionController {
     @PostMapping
     public ResponseEntity<Permission> create(@RequestBody Permission body) {
         Permission created = permissionService.createPermission(body);
-        return ResponseEntity.created(URI.create("/api/permissions/" + created.getId()))
-                .body(created);
+        URI location = URI.create("/api/permissions/" + created.getId());
+        return ResponseEntity.created(location).body(created); // 201 + Location
     }
 
     // PUT /api/permissions/{id}
