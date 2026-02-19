@@ -3,18 +3,30 @@ package com.mx.loloscafe.backend_server.model;
 import com.mx.loloscafe.backend_server.model.enums.OptionType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /** Entity to explain extra option of our products
 * Example: Tipo de leche, shots extra, etc.
 */
 @Entity
-@Table(name = "optionsof")
+@Table(name = "options")
 public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    /// ////////////////////////
+    ///      RELATIONS        //
+    ////////////////////////////
+
+    @ManyToMany(mappedBy = "allowedOptions")
+    //N:M Option ← Product
+    private Set<Product> products = new HashSet<>();
+
+    /////// - Attributes -
 
     // Mapping enum "OptionType"
     @Enumerated(EnumType.STRING)
@@ -30,17 +42,17 @@ public class Option {
     @Column(nullable = false)
     private Boolean available = true;
 
-    // Empty Constructure
-    public Option() {
-    }
-
-    // JPA Constructor
+    // Constructor method - JPA Constructor
     public Option(Integer id, OptionType type, String name, BigDecimal extraPrice, Boolean available) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.extraPrice = extraPrice;
         this.available = available;
+    }
+
+    // Empty Constructure
+    public Option() {
     }
 
     // Setters and Getters
