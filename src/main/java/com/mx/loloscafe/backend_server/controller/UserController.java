@@ -73,7 +73,7 @@ public class UserController {
 
     //Creación de Update User
     @PutMapping("/update-user/{id}")
-    public ResponseEntity<User> UpdateUser(@RequestBody User user, @PathVariable Integer id){ //este es el cuerpo para que retorne ese estado
+    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Integer id){ //este es el cuerpo para que retorne ese estado
         try { return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUserById(user, id));
         } catch (UserNotFoundException Ex){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
