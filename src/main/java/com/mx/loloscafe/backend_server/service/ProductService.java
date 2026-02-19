@@ -70,7 +70,7 @@ public class ProductService {
                     existing.setNameOf(product.getNameOf());
                     existing.setDescription(product.getDescription());
                     existing.setType(product.getType());
-                    existing.setHaveCoffe(product.isHaveCoffe());
+                    existing.setHasCoffe(product.hasCoffe());
                     existing.setUrlImage(product.getUrlImage());
 //                    existing.setCategory(product.getCategory());
 
