@@ -4,6 +4,7 @@ import com.mx.loloscafe.backend_server.model.OrderItems;
 import com.mx.loloscafe.backend_server.repository.OrderItemsRepository;
 import com.mx.loloscafe.backend_server.model.Option;
 import com.mx.loloscafe.backend_server.repository.OptionRepository;
+import com.mx.loloscafe.backend_server.repository.ProductSizePriceRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,26 @@ public class OrderItemsService {
 
     // Calculate baseprice
     private BigDecimal calculateBasePrice(OrderItems item) {
-        // productsizeprice stuff goes here
+
+        if (item.getProduct() == null || item.getProduct().getId() == null) {
+            throw new IllegalArgumentException("Item requires a product with id");
+        }
+
+        if (item.getSize() == null || item.getSize().getId() == null) {
+            throw new IllegalArgumentException("Item requires a size with id");
+        }
+
+        Integer productId = item.getProduct().getId();
+        Integer sizeId = item.getSize().getId();
+
+        return productSizePriceRepository
+                .findByProduct_IdAndSize_Id(productId, sizeId)
+                .map(psp -> psp.getPrecio())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "No base price found in product_size_price for productId=" + productId + " and sizeId=" + sizeId
+                ));
     }
+
 
     // Calculate total item price (total extras and total line)
     private void recalculateTotals(OrderItems item) {
