@@ -11,13 +11,6 @@ public interface UserRepository extends JpaRepository <User, Integer> {
     // saveById, findById, deleteById
 
     User findByEmail(String email);
-
-
-
-
-
-
-
 }
 
 
