@@ -1,6 +1,5 @@
 package com.mx.loloscafe.backend_server.service;
 
-import ch.qos.logback.classic.encoder.JsonEncoder;
 import com.mx.loloscafe.backend_server.exceptions.UserNotFoundException;
 import com.mx.loloscafe.backend_server.model.User;
 import com.mx.loloscafe.backend_server.repository.UserRepository;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -55,13 +53,11 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
-
     // Método para recuperar usuarios por findByID
 
     public User findById(Integer id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
-
 
     //Método para eliminar usuarios por ID
 
@@ -84,18 +80,7 @@ public class UserService {
                     return userRepository.save(userData);
                 })
                 .orElseThrow(() -> new UserNotFoundException(id));// Si encuentras lo que vamos a pasarte (id) realiza esto...
-
     }
-
-
-
-
-
-
-
-
-
-
 }
 
 
