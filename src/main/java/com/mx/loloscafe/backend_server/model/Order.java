@@ -3,6 +3,7 @@ package com.mx.loloscafe.backend_server.model;
 import com.mx.loloscafe.backend_server.model.enums.OrderStatus;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -22,14 +23,15 @@ public class Order {
 
     @Column(name = "general_notes")
     private String generalNotes;
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
-    private Long subtotal;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
-    private Long discount;
+    private BigDecimal subtotal;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
-    private Long total;
+    private BigDecimal discount;
+
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2)")
+    private BigDecimal total;
 
     @Column(name = "date_creation", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime dateCreation;
@@ -39,8 +41,7 @@ public class Order {
     @JoinColumn(name = "id_user")
     private User user;
 
-
-    public Order(Integer idOrder, LocalDateTime dateCreation, Long total, Long discount, Long subtotal, String generalNotes, OrderStatus statusOf) {
+    public Order(Integer idOrder, LocalDateTime dateCreation, BigDecimal total, BigDecimal discount, BigDecimal subtotal, String generalNotes, OrderStatus statusOf) {
         this.idOrder = idOrder;
         this.dateCreation = dateCreation;
         this.total = total;
@@ -69,27 +70,27 @@ public class Order {
         this.dateCreation = dateCreation;
     }
 
-    public Long getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public Long getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Long discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
-    public Long getSubtotal() {
+    public BigDecimal getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(Long subtotal) {
+    public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -123,7 +124,6 @@ public class Order {
     }
 
     //User Getter and Setter
-
 
     public User getUser() {
         return user;

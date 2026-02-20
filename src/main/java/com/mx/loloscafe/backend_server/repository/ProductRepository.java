@@ -1,4 +1,16 @@
 package com.mx.loloscafe.backend_server.repository;
 
-public interface ProductRepository {
+import com.mx.loloscafe.backend_server.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ProductRepository extends JpaRepository<Product, Integer> {
+
+    List<Product> findByAvailable();
+
+    List <Product> findByCategoryIdAvailable(Integer categoryId);
+
+    boolean existsByNameOf(String nameOf);
+    boolean existsByProductId(Integer id);
 }

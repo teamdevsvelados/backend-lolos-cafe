@@ -4,5 +4,6 @@ public enum OptionType {
     // Add the types of products
     TEMPERATURA,
     LECHE,
-    EXTRA
+    EXTRA,
+    GRANO_EXTRA
 }

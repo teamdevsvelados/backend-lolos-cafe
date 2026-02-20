@@ -1,11 +1,9 @@
 package com.mx.loloscafe.backend_server.model;
 
-
 import com.mx.loloscafe.backend_server.model.enums.ProductType;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "products")
@@ -25,7 +23,7 @@ public class Product {
     private ProductType type;
 
     @Column(name = "have_coffe", nullable = false)
-    private Boolean haveCoffe = true;
+    private Boolean hasCoffe = true;
 
     @Column(name = "url_image")
     private String urlImage;
@@ -36,13 +34,13 @@ public class Product {
     @Column(name = "date_creation", nullable = false, updatable = false)
     private LocalDateTime dateCreation;
 
-    public Product(Integer id, String nameOf, String description, ProductType type, String urlImage, Boolean haveCoffe, Boolean available, LocalDateTime dateCreation) {
+    public Product(Integer id, String nameOf, String description, ProductType type, String urlImage, Boolean hasCoffe, Boolean available, LocalDateTime dateCreation) {
         this.id = id;
         this.nameOf = nameOf;
         this.description = description;
         this.type = type;
         this.urlImage = urlImage;
-        this.haveCoffe = haveCoffe;
+        this.hasCoffe = hasCoffe;
         this.available = available;
         this.dateCreation = dateCreation;
     }
@@ -51,10 +49,6 @@ public class Product {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getDescription() {
@@ -81,19 +75,19 @@ public class Product {
         this.type = type;
     }
 
-    public Boolean getHaveCoffe() {
-        return haveCoffe;
+    public boolean hasCoffe() {
+        return hasCoffe;
     }
 
-    public void setHaveCoffe(Boolean haveCoffe) {
-        this.haveCoffe = haveCoffe;
+    public void setHasCoffe(Boolean hasCoffe) {
+        this.hasCoffe = hasCoffe;
     }
 
     public Boolean getAvailable() {
         return available;
     }
 
-    public void setAvailable(Boolean available) {
+    public void setAvailable(boolean available) {
         this.available = available;
     }
 
@@ -113,30 +107,6 @@ public class Product {
         this.dateCreation = dateCreation;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", nameOf='" + nameOf + '\'' +
-                ", description='" + description + '\'' +
-                ", type=" + type +
-                ", haveCoffe=" + haveCoffe +
-                ", urlImage='" + urlImage + '\'' +
-                ", available=" + available +
-                ", dateCreation=" + dateCreation +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Product product)) return false;
-        return Objects.equals(id, product.id) && Objects.equals(nameOf, product.nameOf) && Objects.equals(description, product.description) && type == product.type && Objects.equals(haveCoffe, product.haveCoffe) && Objects.equals(urlImage, product.urlImage) && Objects.equals(available, product.available) && Objects.equals(dateCreation, product.dateCreation);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nameOf, description, type, haveCoffe, urlImage, available, dateCreation);
-    }
 
     //    name_of VARCHAR(100) NOT NULL,
 //    description VARCHAR(255),
