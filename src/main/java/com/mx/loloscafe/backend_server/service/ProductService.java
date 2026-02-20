@@ -2,7 +2,7 @@ package com.mx.loloscafe.backend_server.service;
 
 import com.mx.loloscafe.backend_server.model.Product;
 import com.mx.loloscafe.backend_server.repository.ProductRepository;
-import com.mx.loloscafe.backend_server.repository.OrderItemRepository;
+import com.mx.loloscafe.backend_server.repository.OrderItemsRepository;
 import com.mx.loloscafe.backend_server.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final OrderItemRepository orderItemRepository;
+    private final OrderItemsRepository orderItemRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, OrderItemRepository orderItemRepository) {
+    public ProductService(ProductRepository productRepository, OrderItemsRepository orderItemRepository) {
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
     }
