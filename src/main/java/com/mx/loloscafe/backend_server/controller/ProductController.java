@@ -92,23 +92,20 @@ public class ProductController {
     }
 
     // Admin: desactivar producto
-    @DeleteMapping("/{id}")
+    @PatchMapping("/{id}/disable")
 //    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> disableProduct(@PathVariable Integer id) {
 
         productService.disable(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    // Admin: borrado SOLO si no está referenciado
-    @DeleteMapping("/{id}?force=true") //
+    @DeleteMapping("/{id}") //
 //    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> hardDeleteProduct(@PathVariable Integer id) {
-
+    public ResponseEntity<Void> DeleteProduct(@PathVariable Integer id) {
         productService.deleteIfUnused(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
 }

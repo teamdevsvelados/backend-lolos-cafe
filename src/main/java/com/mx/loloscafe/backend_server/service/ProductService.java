@@ -1,8 +1,10 @@
 package com.mx.loloscafe.backend_server.service;
 
+import com.mx.loloscafe.backend_server.model.Category;
 import com.mx.loloscafe.backend_server.model.Product;
+import com.mx.loloscafe.backend_server.repository.CategoryRepository;
 import com.mx.loloscafe.backend_server.repository.ProductRepository;
-import com.mx.loloscafe.backend_server.repository.OrderItemRepository;
+import com.mx.loloscafe.backend_server.repository.OrderItemsRepository;
 import com.mx.loloscafe.backend_server.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,17 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final OrderItemRepository orderItemRepository;
+    private final OrderItemsRepository orderItemRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository, OrderItemRepository orderItemRepository) {
+    public ProductService(ProductRepository productRepository, OrderItemsRepository orderItemRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
+        this.categoryRepository = categoryRepository;
     }
+
+    @Autowired
+
 
     /// /////////////////////////////
     ///         GETTERS            //
@@ -32,12 +38,12 @@ public class ProductService {
 
     // CLIENTE: solo productos disponibles
     public List<Product> getAvailable() {
-        return productRepository.findByAvailable();
+        return productRepository.findByAvailableTrue();
     }
 
     // CLIENTE: productos disponibles por categoría
     public List<Product> getAvailableByCategory(Integer categoryId) {
-        return productRepository.findByCategoryIdAvailable(categoryId);
+        return productRepository.findByAvailableTrue();
     }
 
     // Buscar por ID
@@ -53,8 +59,16 @@ public class ProductService {
     // ADMIN: crear producto
     public Product create(Product newProduct) {
 
-        // Por seguridad, al crear siempre disponible
+        // ensure category exists and attach managed entity
+        Integer categoryId = newProduct.getCategory().getId();
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found: " + categoryId));
+
+        newProduct.setCategory(category);
+
         newProduct.setAvailable(true);
+
         return productRepository.save(newProduct);
     }
 

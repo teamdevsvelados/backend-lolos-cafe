@@ -1,9 +1,13 @@
 package com.mx.loloscafe.backend_server.service;
 
 import com.mx.loloscafe.backend_server.model.OrderItems;
+import com.mx.loloscafe.backend_server.model.Product;
+import com.mx.loloscafe.backend_server.model.ProductSizePrice;
+import com.mx.loloscafe.backend_server.model.enums.OptionType;
 import com.mx.loloscafe.backend_server.repository.OrderItemsRepository;
 import com.mx.loloscafe.backend_server.model.Option;
 import com.mx.loloscafe.backend_server.repository.OptionRepository;
+import com.mx.loloscafe.backend_server.repository.ProductSizePriceRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,15 +23,85 @@ public class OrderItemsService {
     private final ProductSizePriceRepository productSizePriceRepository;
 
     @Autowired
-    public OrderItemsService(OrderItemsRepository orderItemsRepository, OptionRepository optionRepository, ProductSizePriceRepository productSizePriceRepository) {
+    public OrderItemsService( OrderItemsRepository orderItemsRepository, OptionRepository optionRepository, ProductSizePriceRepository productSizePriceRepository) {
         this.orderItemsRepository = orderItemsRepository;
         this.optionRepository = optionRepository;
         this.productSizePriceRepository = productSizePriceRepository;
     }
-
     // Calculate baseprice
+    /*
+    If the product has sizes → the price comes from
+    product_size_price (product + size)
+    If the product does NOT have sizes → the price is fixed for the product
+     */
     private BigDecimal calculateBasePrice(OrderItems item) {
-        // productsizeprice stuff goes here
+
+        if (item.getProduct() == null || item.getProduct().getId() == null) {
+            throw new IllegalArgumentException("Item requires a product to calculate base price");
+        }
+        if (item.getSize() == null || item.getSize().getId() == null) {
+            throw new IllegalArgumentException("Item requires a size (with id) to calculate base price");
+        }
+
+        Integer productId = item.getProduct().getId();
+        Integer sizeId = item.getSize().getId();
+
+        ProductSizePrice psp = productSizePriceRepository
+                .findByProduct_IdAndSize_Id(productId, sizeId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "No price configured for productId=" + productId + " sizeId=" + sizeId
+                ));
+
+        if (psp.getPrice() == null) {
+            throw new IllegalStateException(
+                    "Configured price is null for productId=" + productId + " sizeId=" + sizeId
+            );
+        }
+
+        return psp.getPrice();
+    }
+
+    private void validateOptionForItem(OrderItems item, Option option) {
+
+        Product product = item.getProduct();
+
+        // Validate that the option is allowed for the product
+
+        if (product.getAllowedOptions() == null || product.getAllowedOptions().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Product '" + product.getNameOf() + "' does not allow any options"
+            );
+        }
+
+        boolean allowed = product.getAllowedOptions().stream()
+                .anyMatch(o -> o.getId().equals(option.getId()));
+
+        if (!allowed) {
+            throw new IllegalArgumentException(
+                    "Option '" + option.getName() +
+                            "' is not allowed for product '" + product.getNameOf() + "'"
+            );
+        }
+
+        // if product hascoffe → GRANO
+        if (option.getType() == OptionType.GRANO_EXTRA && !product.hasCoffe()) {
+            throw new IllegalArgumentException(
+                    "Product '" + product.getNameOf() + "' does not allow coffee grain options"
+            );
+        }
+
+        // Just one type of milk
+        boolean alreadyExistsSameType = item.getOptions().stream()
+                .anyMatch(o -> o.getType() == option.getType());
+
+        if (alreadyExistsSameType &&
+                (option.getType() == OptionType.LECHE ||
+                        option.getType() == OptionType.GRANO_EXTRA)) {
+
+            throw new IllegalArgumentException(
+                    "Only one option of type " + option.getType() + " is allowed per item"
+            );
+        }
     }
 
     // Calculate total item price (total extras and total line)
@@ -64,7 +138,6 @@ public class OrderItemsService {
 
         item.setTotalLine(baseTotal.add(totalExtras));
     }
-
 
     // Create item, no options yet.
     @Transactional
@@ -113,6 +186,7 @@ public class OrderItemsService {
         }
 
         // Add option
+        validateOptionForItem(item, option);
         item.getOptions().add(option);
 
         // Recalculate total

@@ -7,10 +7,9 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-    List<Product> findByAvailable();
+    List<Product> findByAvailableTrue();
 
-    List <Product> findByCategoryIdAvailable(Integer categoryId);
+    // List <Product> findByCategoryIdAvailable(Integer categoryId);
 
     boolean existsByNameOf(String nameOf);
-    boolean existsByProductId(Integer id);
 }

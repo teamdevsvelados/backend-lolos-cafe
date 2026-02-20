@@ -4,6 +4,8 @@ import com.mx.loloscafe.backend_server.model.enums.ProductType;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -11,6 +13,27 @@ public class Product {
     @Id // PK
     @GeneratedValue(strategy = GenerationType.IDENTITY) //This annotation makes a value auto-incrementable
     private Integer id;
+
+    /// ////////////////////////
+    ///      RELATIONS        //
+    ////////////////////////////
+
+    @ManyToOne
+    @JoinColumn(name = "id_category", nullable = false)
+    private Category category;
+
+    @ManyToMany
+    //M:N Product → Option
+    @JoinTable(
+            name = "option_product",
+            joinColumns = @JoinColumn(name = "id_product"),
+            inverseJoinColumns = @JoinColumn(name = "id_option")
+    )
+    private Set<Option> allowedOptions = new HashSet<>();
+
+
+    /////// - Attributes -
+
 
     @Column (name = "name_of", nullable = false, length = 100)
     private String nameOf;
@@ -31,16 +54,18 @@ public class Product {
     @Column (nullable = false)
     private Boolean available = true;
 
-    @Column(name = "date_creation", nullable = false, updatable = false)
+    @Column(name = "date_creation", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime dateCreation;
 
-    public Product(Integer id, String nameOf, String description, ProductType type, String urlImage, Boolean hasCoffe, Boolean available, LocalDateTime dateCreation) {
+    public Product(Integer id, Category category, Set<Option> allowedOptions, String nameOf, String description, ProductType type, Boolean hasCoffe, String urlImage, Boolean available, LocalDateTime dateCreation) {
         this.id = id;
+        this.category = category;
+        this.allowedOptions = allowedOptions;
         this.nameOf = nameOf;
         this.description = description;
         this.type = type;
-        this.urlImage = urlImage;
         this.hasCoffe = hasCoffe;
+        this.urlImage = urlImage;
         this.available = available;
         this.dateCreation = dateCreation;
     }
@@ -49,6 +74,22 @@ public class Product {
 
     public Integer getId() {
         return id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Boolean getHasCoffe() {
+        return hasCoffe;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 
     public String getDescription() {
@@ -107,6 +148,20 @@ public class Product {
         this.dateCreation = dateCreation;
     }
 
+    public Set<Option> getAllowedOptions() {
+        return allowedOptions;
+    }
+
+    public void setAllowedOptions(Set<Option> allowedOptions) {
+        this.allowedOptions = allowedOptions;
+    }
+
+    @PrePersist
+    void prePersist() {
+        if (dateCreation == null) {
+            dateCreation = LocalDateTime.now();
+        }
+    }
 
     //    name_of VARCHAR(100) NOT NULL,
 //    description VARCHAR(255),

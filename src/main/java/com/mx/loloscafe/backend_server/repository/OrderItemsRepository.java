@@ -23,4 +23,5 @@ public interface OrderItemsRepository extends JpaRepository <OrderItems, Integer
             """)
     BigDecimal sumTotalLineByOrderId(@Param("orderId") Integer orderId);
 
+    boolean existsByProductId(Integer id);
 }
