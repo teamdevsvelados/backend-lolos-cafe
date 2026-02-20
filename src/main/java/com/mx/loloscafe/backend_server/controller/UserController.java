@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 //Se hace un "mapeo explicito" en el Request Mapping
 @RequestMapping("/api/v1/users") //"/api" es la convención tradicional para trabajar con APIs
-
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
@@ -79,8 +80,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
     }
