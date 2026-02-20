@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+
 
 import java.util.List;
 
@@ -44,7 +46,6 @@ public class OfferController {
 
     // Create a new offer.
     @PostMapping
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Offer> saveOffer(@RequestBody @Valid Offer newOffer) {
         return ResponseEntity.status(HttpStatus.CREATED).body(offerService.createOffer(newOffer));
     }
@@ -57,7 +58,6 @@ public class OfferController {
 
     // Delete an offer by id.
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> deleteOfferById(@PathVariable Integer id) {
         offerService.deleteOfferById(id);
         return ResponseEntity.noContent().build();
@@ -65,7 +65,6 @@ public class OfferController {
 
     // Update an existing offer.
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Offer> updateOffer(@RequestBody @Valid Offer offer, @PathVariable Integer id) {
         return ResponseEntity.ok(offerService.updateOfferById(offer, id));
     }

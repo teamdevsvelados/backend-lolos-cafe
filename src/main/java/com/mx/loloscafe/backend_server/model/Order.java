@@ -15,7 +15,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer idOrder;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_of", nullable = false)
@@ -41,25 +41,26 @@ public class Order {
     @JoinColumn(name = "id_user")
     private User user;
 
-    public Order(Integer idOrder, LocalDateTime dateCreation, BigDecimal total, BigDecimal discount, BigDecimal subtotal, String generalNotes, OrderStatus statusOf) {
-        this.idOrder = idOrder;
-        this.dateCreation = dateCreation;
-        this.total = total;
-        this.discount = discount;
-        this.subtotal = subtotal;
-        this.generalNotes = generalNotes;
+    public Order(Integer id, OrderStatus statusOf, String generalNotes, BigDecimal subtotal, BigDecimal discount, BigDecimal total, LocalDateTime dateCreation, User user) {
+        this.id = id;
         this.statusOf = statusOf;
+        this.generalNotes = generalNotes;
+        this.subtotal = subtotal;
+        this.discount = discount;
+        this.total = total;
+        this.dateCreation = dateCreation;
+        this.user = user;
     }
 
     public Order() {
     }
 
-    public Integer getIdOrder() {
-        return idOrder;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdOrder(Integer idOrder) {
-        this.idOrder = idOrder;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public LocalDateTime getDateCreation() {
@@ -113,7 +114,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "idOrder=" + idOrder +
+                "id=" + id +
                 ", statusOf=" + statusOf +
                 ", generalNotes='" + generalNotes + '\'' +
                 ", subtotal=" + subtotal +
@@ -137,11 +138,11 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(idOrder, order.idOrder) && statusOf == order.statusOf && Objects.equals(generalNotes, order.generalNotes) && Objects.equals(subtotal, order.subtotal) && Objects.equals(discount, order.discount) && Objects.equals(total, order.total) && Objects.equals(dateCreation, order.dateCreation);
+        return Objects.equals(id, order.id) && statusOf == order.statusOf && Objects.equals(generalNotes, order.generalNotes) && Objects.equals(subtotal, order.subtotal) && Objects.equals(discount, order.discount) && Objects.equals(total, order.total) && Objects.equals(dateCreation, order.dateCreation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idOrder, statusOf, generalNotes, subtotal, discount, total, dateCreation);
+        return Objects.hash(id, statusOf, generalNotes, subtotal, discount, total, dateCreation);
     }
 }

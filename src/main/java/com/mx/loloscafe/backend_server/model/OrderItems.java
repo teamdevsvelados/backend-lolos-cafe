@@ -20,7 +20,7 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "id_product", nullable = false)
-    private Products product;
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "id_size")
@@ -53,7 +53,7 @@ public class OrderItems {
     // Constructor method
 
 
-    public OrderItems(Integer id, Order order, Products product, Size size, Set<Option> options, Integer quantity, String itemNotes, BigDecimal basePrice, BigDecimal totalExtras, BigDecimal totalLine) {
+    public OrderItems(Integer id, Order order, Product product, Size size, Set<Option> options, Integer quantity, String itemNotes, BigDecimal basePrice, BigDecimal totalExtras, BigDecimal totalLine) {
         this.id = id;
         this.order = order;
         this.product = product;
@@ -87,11 +87,11 @@ public class OrderItems {
         this.order = order;
     }
 
-    public Products getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Products product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
@@ -156,7 +156,7 @@ public class OrderItems {
         return "OrderItems{" +
                 "id=" + id +
                 ", order=" + order +
-                ", products=" + products +
+                ", product=" + product +
                 ", size=" + size +
                 ", quantity=" + quantity +
                 ", itemNotes='" + itemNotes + '\'' +

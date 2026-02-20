@@ -36,45 +36,29 @@ public class OrderItemsService {
      */
     private BigDecimal calculateBasePrice(OrderItems item) {
 
-        if (item.getProduct() == null) {
+        if (item.getProduct() == null || item.getProduct().getId() == null) {
             throw new IllegalArgumentException("Item requires a product to calculate base price");
         }
-
-        Product product = item.getProduct();
-
-        // 1️Product with one size → fixed price
-        if (item.getSize() == null) {
-            if (product.getBasePrice() == null) {
-                throw new IllegalStateException(
-                        "Product '" + product.getNameOf() + "' does not have a base price"
-                );
-            }
-
-            return product.getBasePrice();
+        if (item.getSize() == null || item.getSize().getId() == null) {
+            throw new IllegalArgumentException("Item requires a size (with id) to calculate base price");
         }
 
-        // Search price for product + size
-        Integer productId = product.getId();
+        Integer productId = item.getProduct().getId();
         Integer sizeId = item.getSize().getId();
 
-        if (sizeId == null) {
-            throw new IllegalArgumentException("Size id is required to calculate base price");
-        }
-
-        ProductSizePrice price = productSizePriceRepository
+        ProductSizePrice psp = productSizePriceRepository
                 .findByProduct_IdAndSize_Id(productId, sizeId)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "No price configured for product '" + product.getNameOf() +
-                                "' and size id " + sizeId
+                        "No price configured for productId=" + productId + " sizeId=" + sizeId
                 ));
 
-        if (price.getPrice() == null) {
+        if (psp.getPrice() == null) {
             throw new IllegalStateException(
-                    "Configured price is null for product '" + product.getNameOf() + "'"
+                    "Configured price is null for productId=" + productId + " sizeId=" + sizeId
             );
         }
 
-        return price.getPrice();
+        return psp.getPrice();
     }
 
     private void validateOptionForItem(OrderItems item, Option option) {

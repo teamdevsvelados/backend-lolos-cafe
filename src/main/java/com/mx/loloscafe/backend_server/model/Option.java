@@ -33,7 +33,7 @@ public class Option {
     @Column(name = "typeOf", nullable = false)
     private OptionType type;
 
-    @Column(name = "nameOf", nullable = false, length = 50)
+    @Column(name = "name_Of", nullable = false, length = 50)
     private String name;
 
     @Column(name = "extra_price", nullable = false, precision = 10, scale = 2)

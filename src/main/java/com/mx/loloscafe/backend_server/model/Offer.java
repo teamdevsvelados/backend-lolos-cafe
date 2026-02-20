@@ -2,7 +2,7 @@ package com.mx.loloscafe.backend_server.model;
 
 import com.mx.loloscafe.backend_server.model.enums.DiscountType;
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
