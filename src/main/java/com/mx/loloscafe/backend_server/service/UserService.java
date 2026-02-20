@@ -53,6 +53,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
+
     // Método para recuperar usuarios por findByID
 
     public User findById(Integer id) {
