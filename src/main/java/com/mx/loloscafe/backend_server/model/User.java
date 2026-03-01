@@ -1,5 +1,6 @@
 package com.mx.loloscafe.backend_server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
 
