@@ -8,4 +8,3 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderItemsRepository extends JpaRepository <OrderItems, Integer> {
 }
-
