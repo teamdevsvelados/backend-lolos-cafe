@@ -1,6 +1,5 @@
 package com.mx.loloscafe.backend_server.service;
 
-import ch.qos.logback.classic.encoder.JsonEncoder;
 import com.mx.loloscafe.backend_server.exceptions.UserNotFoundException;
 import com.mx.loloscafe.backend_server.model.User;
 import com.mx.loloscafe.backend_server.repository.UserRepository;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -27,6 +25,7 @@ public class UserService {
 
     //_____Crear nuevas instancias____
 
+    //register
     public User createUser(User newUser) {
         //Creación del password
         return userRepository.save(newUser);
@@ -34,18 +33,31 @@ public class UserService {
         // guardarlo y el return muestra que se guardó
     }
 
-    //Método findbyemail adaptado a la lógica de Lolo's Café
+    //login
+    public User login(String email, String password) {
+        return userRepository
+                .findByEmailAndPassword(email, password)
+                .orElse(null);
+    }
+
+
+
+//Método findbyemail adaptado a la lógica de Lolo's Café
+
+//    public User findByEmail(String email) {
+//        return userRepository.findByEmail(email);
+//    }
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElse(null);
     }
+
 
     // Método para recuperar usuarios por findByID
 
     public User findById(Integer id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
-
 
     //Método para eliminar usuarios por ID
 
@@ -56,7 +68,7 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
     }
-
+    
     // Método para actualizar un usuario
 
     public User updateUserById(User user, Integer id){
@@ -68,18 +80,7 @@ public class UserService {
                     return userRepository.save(userData);
                 })
                 .orElseThrow(() -> new UserNotFoundException(id));// Si encuentras lo que vamos a pasarte (id) realiza esto...
-
     }
-
-
-
-
-
-
-
-
-
-
 }
 
 

@@ -1,0 +1,129 @@
+package com.mx.loloscafe.backend_server.service;
+
+import com.mx.loloscafe.backend_server.model.Category;
+import com.mx.loloscafe.backend_server.model.Product;
+import com.mx.loloscafe.backend_server.repository.CategoryRepository;
+import com.mx.loloscafe.backend_server.repository.ProductRepository;
+import com.mx.loloscafe.backend_server.repository.OrderItemsRepository;
+import com.mx.loloscafe.backend_server.exceptions.ProductNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ProductService {
+
+    private final ProductRepository productRepository;
+    private final OrderItemsRepository orderItemRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductService(ProductRepository productRepository, OrderItemsRepository orderItemRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Autowired
+
+
+    /// /////////////////////////////
+    ///         GETTERS            //
+    /// /////////////////////////////
+
+    // ADMIN: todos los productos (activos + inactivos)
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
+
+    // CLIENTE: solo productos disponibles
+    public List<Product> getAvailable() {
+        return productRepository.findByAvailableTrue();
+    }
+
+    // CLIENTE: productos disponibles por categoría
+    public List<Product> getAvailableByCategory(Integer categoryId) {
+        return productRepository.findByAvailableTrue();
+    }
+
+    // Buscar por ID
+    public Product findById(Integer id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id)); //this is OrderItemException
+    }
+
+    /// /////////////////////////////
+    ///         CREATE             //
+    /// /////////////////////////////
+
+    // ADMIN: crear producto
+    public Product create(Product newProduct) {
+
+        // ensure category exists and attach managed entity
+        Integer categoryId = newProduct.getCategory().getId();
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found: " + categoryId));
+
+        newProduct.setCategory(category);
+
+        newProduct.setAvailable(true);
+
+        return productRepository.save(newProduct);
+    }
+
+    /// /////////////////////////////
+    ///         UPDATE             //
+    /// /////////////////////////////
+
+    // ADMIN: actualizar producto
+    public Product update(Integer id, Product product) {
+
+        return productRepository.findById(id)
+                .map(existing -> {
+                    existing.setNameOf(product.getNameOf());
+                    existing.setDescription(product.getDescription());
+                    existing.setType(product.getType());
+                    existing.setHasCoffe(product.hasCoffe());
+                    existing.setUrlImage(product.getUrlImage());
+//                    existing.setCategory(product.getCategory());
+
+                    return productRepository.save(existing);
+                })
+                .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    /// /////////////////////////////
+    ///         DELETE             //
+    /// /////////////////////////////
+
+    // ADMIN: soft delete
+    public void disable(Integer id) {
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        product.setAvailable(false);
+        productRepository.save(product);
+    }
+
+
+    // ADMIN: delete SOLO si no está referenciado
+    public void deleteIfUnused(Integer id) {
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        boolean isReferenced = orderItemRepository.existsByProductId(id); //check
+
+        if (isReferenced) {
+            // if referenced → deactivated
+            product.setAvailable(false);
+            productRepository.save(product);
+        } else {
+            // not  referenced → delete
+            productRepository.deleteById(id);
+        }
+    }
+
+}
