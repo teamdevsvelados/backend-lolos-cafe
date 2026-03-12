@@ -1,5 +1,6 @@
 package com.mx.loloscafe.backend_server.model;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
@@ -157,5 +158,3 @@ public class OrderItems {
         return Objects.hash(id, order, products, size, quantity, itemNotes, basePrice, totalExtras, totalLine);
     }
 }
-
-
