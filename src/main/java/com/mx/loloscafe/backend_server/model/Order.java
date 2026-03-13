@@ -21,7 +21,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long idOrder;
+    private Integer idOrder;
 
     @Column(name = "customer_name", length = 150)
     private String customerName;
@@ -37,7 +37,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_of", nullable = false)
-    private OrderStatus statusOf = OrderStatus.CREADO;
+    private OrderStatus status = OrderStatus.CREADO;
 
     @Column(name = "general_notes", length = 500)
     private String generalNotes;
@@ -63,7 +63,7 @@ public class Order {
     @JoinColumn(name = "id_user")
     private User user;
 
-    public Order(Long idOrder, User user, LocalDateTime dateCreation, Boolean available, BigDecimal total, BigDecimal discount, BigDecimal subtotal, String generalNotes, OrderStatus statusOf, String paymentMethod, String customerAddress, String customerPhone, String customerName) {
+    public Order(Integer idOrder, User user, LocalDateTime dateCreation, Boolean available, BigDecimal total, BigDecimal discount, BigDecimal subtotal, String generalNotes, OrderStatus status, String paymentMethod, String customerAddress, String customerPhone, String customerName) {
         this.idOrder = idOrder;
         this.user = user;
         this.dateCreation = dateCreation;
@@ -72,7 +72,7 @@ public class Order {
         this.discount = discount;
         this.subtotal = subtotal;
         this.generalNotes = generalNotes;
-        this.statusOf = statusOf;
+        this.status = status;
         this.paymentMethod = paymentMethod;
         this.customerAddress = customerAddress;
         this.customerPhone = customerPhone;
@@ -82,11 +82,11 @@ public class Order {
     public Order() {
     }
 
-    public Long getIdOrder() {
+    public Integer getIdOrder() {
         return idOrder;
     }
 
-    public void setIdOrder(Long idOrder) {
+    public void setIdOrder(Integer idOrder) {
         this.idOrder = idOrder;
     }
 
@@ -122,13 +122,9 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public OrderStatus getStatusOf() {
-        return statusOf;
-    }
+    public OrderStatus getStatus() {return status; }
 
-    public void setStatusOf(OrderStatus statusOf) {
-        this.statusOf = statusOf;
-    }
+    public void setStatus(OrderStatus status) { this.status = status; }
 
     public String getGeneralNotes() {
         return generalNotes;
@@ -194,7 +190,7 @@ public class Order {
                 ", customerPhone='" + customerPhone + '\'' +
                 ", customerAddress='" + customerAddress + '\'' +
                 ", paymentMethod='" + paymentMethod + '\'' +
-                ", statusOf=" + statusOf +
+                ", status=" + status +
                 ", generalNotes='" + generalNotes + '\'' +
                 ", subtotal=" + subtotal +
                 ", discount=" + discount +
@@ -209,11 +205,11 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(idOrder, order.idOrder) && Objects.equals(customerName, order.customerName) && Objects.equals(customerPhone, order.customerPhone) && Objects.equals(customerAddress, order.customerAddress) && Objects.equals(paymentMethod, order.paymentMethod) && statusOf == order.statusOf && Objects.equals(generalNotes, order.generalNotes) && Objects.equals(subtotal, order.subtotal) && Objects.equals(discount, order.discount) && Objects.equals(total, order.total) && Objects.equals(available, order.available) && Objects.equals(dateCreation, order.dateCreation) && Objects.equals(user, order.user);
+        return Objects.equals(idOrder, order.idOrder) && Objects.equals(customerName, order.customerName) && Objects.equals(customerPhone, order.customerPhone) && Objects.equals(customerAddress, order.customerAddress) && Objects.equals(paymentMethod, order.paymentMethod) && status == order.status && Objects.equals(generalNotes, order.generalNotes) && Objects.equals(subtotal, order.subtotal) && Objects.equals(discount, order.discount) && Objects.equals(total, order.total) && Objects.equals(available, order.available) && Objects.equals(dateCreation, order.dateCreation) && Objects.equals(user, order.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idOrder, customerName, customerPhone, customerAddress, paymentMethod, statusOf, generalNotes, subtotal, discount, total, available, dateCreation, user);
+        return Objects.hash(idOrder, customerName, customerPhone, customerAddress, paymentMethod, status, generalNotes, subtotal, discount, total, available, dateCreation, user);
     }
 }

@@ -33,7 +33,7 @@ public class OrderService {
     public Order createOrder(Order newOrder) {
 
         newOrder.setDateCreation(LocalDateTime.now());
-        newOrder.setStatusOf(OrderStatus.CREADO);
+        newOrder.setStatus(OrderStatus.CREADO);
         newOrder.setSubtotal(BigDecimal.ZERO);
         newOrder.setDiscount(BigDecimal.ZERO);
         newOrder.setTotal(BigDecimal.ZERO);
@@ -46,7 +46,7 @@ public class OrderService {
         return orderRepository.findById(orderId)
                 .map(order -> {
                     order.setGeneralNotes(updatedOrder.getGeneralNotes());
-                    order.setStatusOf(updatedOrder.getStatusOf());
+                    order.setStatus(updatedOrder.getStatus());
                     return orderRepository.save(order);
                 })
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
@@ -74,7 +74,7 @@ public class OrderService {
 
     //Get orders by status
     public List<Order> getOrdersByStatus(OrderStatus status){
-        return orderRepository.findByStatusOf(status);
+        return orderRepository.findByStatus(status);
     }
 
     //Find order by id

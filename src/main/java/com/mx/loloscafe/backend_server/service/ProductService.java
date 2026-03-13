@@ -114,7 +114,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        boolean isReferenced = orderItemRepository.existsByProductId(id); //check
+        boolean isReferenced = orderItemRepository.existsByProduct_Id(id); //check
 
         if (isReferenced) {
             // if referenced → deactivated

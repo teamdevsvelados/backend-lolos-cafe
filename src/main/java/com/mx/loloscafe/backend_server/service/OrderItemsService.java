@@ -280,6 +280,6 @@ public class OrderItemsService {
 
     @Transactional
     public List<OrderItems> getItemsByOrderId(Integer orderId) {
-        return orderItemsRepository.findByOrder_Id(orderId);
+        return orderItemsRepository.findByOrder_IdOrder(orderId);
     }
 }
