@@ -14,16 +14,24 @@ import java.util.List;
 public interface OrderItemsRepository extends JpaRepository <OrderItems, Integer> {
 
     // Gets all orderItems with the same orderId
-    List<OrderItems> findByOrder_Id(Integer orderId);
+    //List<OrderItems> findByOrder_Id(Integer orderId);
+    List<OrderItems> findByOrder_IdOrder(Integer orderId);
 
     // Adds subtotal per orderId (necessary for order service)
+//    @Query("""
+//            SELECT COALESCE(SUM(oi.totalLine), 0)
+//            FROM OrderItems oi
+//            WHERE oi.order.id = :orderId
+//            """)
+//    BigDecimal sumTotalLineByOrderId(@Param("orderId") Integer orderId);
+
     @Query("""
-            SELECT COALESCE(SUM(oi.totalLine), 0)
-            FROM OrderItems oi 
-            WHERE oi.order.id = :orderId
-            """)
+        SELECT COALESCE(SUM(oi.totalLine), 0)
+        FROM OrderItems oi
+        WHERE oi.order.idOrder = :orderId
+        """)
     BigDecimal sumTotalLineByOrderId(@Param("orderId") Integer orderId);
 
-    boolean existsByProductId(Integer id);
+    boolean existsByProduct_Id(Integer id);
 }
 
